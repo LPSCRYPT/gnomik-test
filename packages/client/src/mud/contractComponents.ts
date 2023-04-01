@@ -5,8 +5,8 @@ import { defineComponent, Type as RecsType, World } from "@latticexyz/recs";
 
 export function defineContractComponents(world: World) {
   return {
-    CounterTable: (() => {
-      const tableId = new TableId("", "counter");
+    MushroomTable: (() => {
+      const tableId = new TableId("gnomik", "MushroomTable");
       return defineComponent(
         world,
         {

@@ -273,6 +273,20 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "gnomik_mushroom_eat",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "gnomik_mushroom_produce",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "bytes16",
@@ -310,19 +324,6 @@ const _abi = [
     ],
     name: "grantAccess",
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "increment",
-    outputs: [
-      {
-        internalType: "uint32",
-        name: "",
-        type: "uint32",
-      },
-    ],
     stateMutability: "nonpayable",
     type: "function",
   },

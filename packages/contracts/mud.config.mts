@@ -1,26 +1,33 @@
 import { mudConfig, resolveTableId } from "@latticexyz/cli";
 
 export default mudConfig({
+  namespace: "gnomik",
   overrideSystems: {
-    IncrementSystem: {
-      fileSelector: "increment",
+    MushroomSystem: {
+      fileSelector: "mushroom",
       openAccess: true,
     },
   },
   tables: {
-    CounterTable: {
-      fileSelector: "counter",
-      schema: {
-        value: "uint32",
+    MushroomTable: {
+      primaryKeys: {
+        player: "address"
       },
-      storeArgument: true,
-    },
+      schema: {
+        value: "int32"
+      }
+    }
   },
   modules: [
-    {
-      name: "KeysWithValueModule",
-      root: true,
-      args: [resolveTableId("CounterTable")],
-    },
+    // {
+    //   name: "KeysWithValueModule",
+    //   root: true,
+    //   args: [resolveTableId("'CounterTable'")],
+    // },
+    // {
+    //   name: "KeysWithValueModule",
+    //   root: true,
+    //   args: [resolveTableId("CounterTable")],
+    // },
   ],
 });

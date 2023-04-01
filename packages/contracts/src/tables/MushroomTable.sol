@@ -17,21 +17,21 @@ import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
-uint256 constant _tableId = uint256(bytes32(abi.encodePacked(bytes16(""), bytes16("counter"))));
-uint256 constant CounterTableTableId = _tableId;
+uint256 constant _tableId = uint256(bytes32(abi.encodePacked(bytes16("gnomik"), bytes16("MushroomTable"))));
+uint256 constant MushroomTableTableId = _tableId;
 
-library CounterTable {
+library MushroomTable {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.UINT32;
+    _schema[0] = SchemaType.INT32;
 
     return SchemaLib.encode(_schema);
   }
 
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.BYTES32;
+    _schema[0] = SchemaType.ADDRESS;
 
     return SchemaLib.encode(_schema);
   }
@@ -40,7 +40,7 @@ library CounterTable {
   function getMetadata() internal pure returns (string memory, string[] memory) {
     string[] memory _fieldNames = new string[](1);
     _fieldNames[0] = "value";
-    return ("CounterTable", _fieldNames);
+    return ("MushroomTable", _fieldNames);
   }
 
   /** Register the table's schema */
@@ -66,56 +66,56 @@ library CounterTable {
   }
 
   /** Get value */
-  function get(bytes32 key) internal view returns (uint32 value) {
+  function get(address player) internal view returns (int32 value) {
     bytes32[] memory _primaryKeys = new bytes32[](1);
-    _primaryKeys[0] = bytes32((key));
+    _primaryKeys[0] = bytes32(bytes20((player)));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 0);
-    return (uint32(Bytes.slice4(_blob, 0)));
+    return (int32(uint32(Bytes.slice4(_blob, 0))));
   }
 
   /** Get value (using the specified store) */
-  function get(IStore _store, bytes32 key) internal view returns (uint32 value) {
+  function get(IStore _store, address player) internal view returns (int32 value) {
     bytes32[] memory _primaryKeys = new bytes32[](1);
-    _primaryKeys[0] = bytes32((key));
+    _primaryKeys[0] = bytes32(bytes20((player)));
 
     bytes memory _blob = _store.getField(_tableId, _primaryKeys, 0);
-    return (uint32(Bytes.slice4(_blob, 0)));
+    return (int32(uint32(Bytes.slice4(_blob, 0))));
   }
 
   /** Set value */
-  function set(bytes32 key, uint32 value) internal {
+  function set(address player, int32 value) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
-    _primaryKeys[0] = bytes32((key));
+    _primaryKeys[0] = bytes32(bytes20((player)));
 
     StoreSwitch.setField(_tableId, _primaryKeys, 0, abi.encodePacked((value)));
   }
 
   /** Set value (using the specified store) */
-  function set(IStore _store, bytes32 key, uint32 value) internal {
+  function set(IStore _store, address player, int32 value) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
-    _primaryKeys[0] = bytes32((key));
+    _primaryKeys[0] = bytes32(bytes20((player)));
 
     _store.setField(_tableId, _primaryKeys, 0, abi.encodePacked((value)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint32 value) internal view returns (bytes memory) {
+  function encode(int32 value) internal view returns (bytes memory) {
     return abi.encodePacked(value);
   }
 
   /* Delete all data for given keys */
-  function deleteRecord(bytes32 key) internal {
+  function deleteRecord(address player) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
-    _primaryKeys[0] = bytes32((key));
+    _primaryKeys[0] = bytes32(bytes20((player)));
 
     StoreSwitch.deleteRecord(_tableId, _primaryKeys);
   }
 
   /* Delete all data for given keys (using the specified store) */
-  function deleteRecord(IStore _store, bytes32 key) internal {
+  function deleteRecord(IStore _store, address player) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
-    _primaryKeys[0] = bytes32((key));
+    _primaryKeys[0] = bytes32(bytes20((player)));
 
     _store.deleteRecord(_tableId, _primaryKeys);
   }
