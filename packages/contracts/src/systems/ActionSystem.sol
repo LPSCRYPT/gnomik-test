@@ -1,5 +1,6 @@
 pragma solidity >=0.8.0;
 import { System } from "@latticexyz/world/src/System.sol";
+import { HistoryTable } from "../tables/HistoryTable.sol";
 import { ActionTable } from "../tables/ActionTable.sol";
 import { ResourceTable } from "../tables/ResourceTable.sol";
 import { console } from 'forge-std/console.sol';
@@ -129,6 +130,8 @@ contract ActionSystem is System {
         if (keccak256(bytes(ThisData.resultFunction)) == keccak256(bytes("div"))) {
             ResourceTable.set(bytes32(abi.encodePacked(resultResource)), target, ThisData.outputResourceAmount / numModMul, block.timestamp, ThisData.outputRate / rateModMul);
         }
+
+        HistoryTable.set(bytes32(abi.encodePacked(_name)), sender, block.timestamp);
    }
 
 }
