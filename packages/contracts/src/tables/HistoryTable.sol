@@ -24,15 +24,16 @@ library HistoryTable {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.UINT256;
+    _schema[0] = SchemaType.ADDRESS;
 
     return SchemaLib.encode(_schema);
   }
 
   function getKeySchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](2);
+    SchemaType[] memory _schema = new SchemaType[](3);
     _schema[0] = SchemaType.BYTES32;
     _schema[1] = SchemaType.ADDRESS;
+    _schema[2] = SchemaType.UINT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -40,7 +41,7 @@ library HistoryTable {
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
     string[] memory _fieldNames = new string[](1);
-    _fieldNames[0] = "lastTimeUpdated";
+    _fieldNames[0] = "target";
     return ("HistoryTable", _fieldNames);
   }
 
@@ -66,63 +67,74 @@ library HistoryTable {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
-  /** Get lastTimeUpdated */
-  function get(bytes32 action, address gnome) internal view returns (uint256 lastTimeUpdated) {
-    bytes32[] memory _primaryKeys = new bytes32[](2);
+  /** Get target */
+  function get(bytes32 action, address gnome, uint256 lastTimeUpdated) internal view returns (address target) {
+    bytes32[] memory _primaryKeys = new bytes32[](3);
     _primaryKeys[0] = bytes32((action));
     _primaryKeys[1] = bytes32(bytes20((gnome)));
+    _primaryKeys[2] = bytes32(uint256((lastTimeUpdated)));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 0);
-    return (uint256(Bytes.slice32(_blob, 0)));
+    return (address(Bytes.slice20(_blob, 0)));
   }
 
-  /** Get lastTimeUpdated (using the specified store) */
-  function get(IStore _store, bytes32 action, address gnome) internal view returns (uint256 lastTimeUpdated) {
-    bytes32[] memory _primaryKeys = new bytes32[](2);
+  /** Get target (using the specified store) */
+  function get(
+    IStore _store,
+    bytes32 action,
+    address gnome,
+    uint256 lastTimeUpdated
+  ) internal view returns (address target) {
+    bytes32[] memory _primaryKeys = new bytes32[](3);
     _primaryKeys[0] = bytes32((action));
     _primaryKeys[1] = bytes32(bytes20((gnome)));
+    _primaryKeys[2] = bytes32(uint256((lastTimeUpdated)));
 
     bytes memory _blob = _store.getField(_tableId, _primaryKeys, 0);
-    return (uint256(Bytes.slice32(_blob, 0)));
+    return (address(Bytes.slice20(_blob, 0)));
   }
 
-  /** Set lastTimeUpdated */
-  function set(bytes32 action, address gnome, uint256 lastTimeUpdated) internal {
-    bytes32[] memory _primaryKeys = new bytes32[](2);
+  /** Set target */
+  function set(bytes32 action, address gnome, uint256 lastTimeUpdated, address target) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](3);
     _primaryKeys[0] = bytes32((action));
     _primaryKeys[1] = bytes32(bytes20((gnome)));
+    _primaryKeys[2] = bytes32(uint256((lastTimeUpdated)));
 
-    StoreSwitch.setField(_tableId, _primaryKeys, 0, abi.encodePacked((lastTimeUpdated)));
+    StoreSwitch.setField(_tableId, _primaryKeys, 0, abi.encodePacked((target)));
   }
 
-  /** Set lastTimeUpdated (using the specified store) */
-  function set(IStore _store, bytes32 action, address gnome, uint256 lastTimeUpdated) internal {
-    bytes32[] memory _primaryKeys = new bytes32[](2);
+  /** Set target (using the specified store) */
+  function set(IStore _store, bytes32 action, address gnome, uint256 lastTimeUpdated, address target) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](3);
     _primaryKeys[0] = bytes32((action));
     _primaryKeys[1] = bytes32(bytes20((gnome)));
+    _primaryKeys[2] = bytes32(uint256((lastTimeUpdated)));
 
-    _store.setField(_tableId, _primaryKeys, 0, abi.encodePacked((lastTimeUpdated)));
+    _store.setField(_tableId, _primaryKeys, 0, abi.encodePacked((target)));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint256 lastTimeUpdated) internal view returns (bytes memory) {
-    return abi.encodePacked(lastTimeUpdated);
+  function encode(address target) internal view returns (bytes memory) {
+    return abi.encodePacked(target);
   }
 
   /* Delete all data for given keys */
-  function deleteRecord(bytes32 action, address gnome) internal {
-    bytes32[] memory _primaryKeys = new bytes32[](2);
+  function deleteRecord(bytes32 action, address gnome, uint256 lastTimeUpdated) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](3);
     _primaryKeys[0] = bytes32((action));
     _primaryKeys[1] = bytes32(bytes20((gnome)));
+    _primaryKeys[2] = bytes32(uint256((lastTimeUpdated)));
 
     StoreSwitch.deleteRecord(_tableId, _primaryKeys);
   }
 
   /* Delete all data for given keys (using the specified store) */
-  function deleteRecord(IStore _store, bytes32 action, address gnome) internal {
-    bytes32[] memory _primaryKeys = new bytes32[](2);
+  function deleteRecord(IStore _store, bytes32 action, address gnome, uint256 lastTimeUpdated) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](3);
     _primaryKeys[0] = bytes32((action));
     _primaryKeys[1] = bytes32(bytes20((gnome)));
+    _primaryKeys[2] = bytes32(uint256((lastTimeUpdated)));
 
     _store.deleteRecord(_tableId, _primaryKeys);
   }

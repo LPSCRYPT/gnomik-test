@@ -75,8 +75,8 @@ contract ActionSystem is System {
         if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("sub"))) {
             console.log('interior');
             // require(,"");
-            ResourceTable.set(bytes32(abi.encodePacked(costResource1)), sender, 
-            ThisData.inputResourceAmount1 - ThisData.costAmount1, 
+            ResourceTable.set(bytes32(abi.encodePacked(costResource1)), sender,
+            ThisData.inputResourceAmount1 - ThisData.costAmount1,
             block.timestamp, ThisData.inputRate1);
         }
         // console.logInt(ResourceTable.getValue(bytes32(abi.encodePacked("mushroom")), sender));
@@ -131,7 +131,7 @@ contract ActionSystem is System {
             ResourceTable.set(bytes32(abi.encodePacked(resultResource)), target, ThisData.outputResourceAmount / numModMul, block.timestamp, ThisData.outputRate / rateModMul);
         }
 
-        HistoryTable.set(bytes32(abi.encodePacked(_name)), sender, block.timestamp);
+        HistoryTable.set(bytes32(abi.encodePacked(_name)), sender, block.timestamp, target);
    }
 
 }

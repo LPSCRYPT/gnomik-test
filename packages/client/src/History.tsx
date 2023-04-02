@@ -34,7 +34,7 @@ const ACTION_DESCS: Record<string, string[]> = {
     '${actor} browsed Wikipedia for a bit.',
     '${actor} skimmed through a strange textbook.',
   ],
-  buildShroomFarm: [
+  buildshroomfarm: [
     '${actor} built a shroom farm.',
     '${actor} established a new shroom farm.',
     '${actor} founded a shroom farm.',
@@ -52,13 +52,17 @@ const ACTION_DESCS: Record<string, string[]> = {
     '${actor} wandered in the forest for awhile.',
     '${actor} got lost in the woods.',
   ],
-  haveAGnomeParty: [
+  gnomeparty: [
     '${actor} threw a party with some friends.',
     '${actor} had a grand celebration.',
   ],
   giftMushrooms: [
     '${actor} sent ${target} some tasty mushrooms.',
     '${actor} gifted ${target} some delectable shrooms.',
+  ],
+  wearahat: [
+    '${actor} put on a nice hat.',
+    '${actor} donned a pretty hat.',
   ],
   teach: [
     '${actor} taught ${target} about some things.',
@@ -92,7 +96,7 @@ export default function History() {
       actionName = ethers.utils.parseBytes32String(actionName);
 
       let event = inject(getRand(ACTION_DESCS[actionName] || ['${actor} did ' + actionName + '.']), {
-        actor: addr,
+        actor: addr.slice(0, 10),
         target: nextValue.target,
       });
 

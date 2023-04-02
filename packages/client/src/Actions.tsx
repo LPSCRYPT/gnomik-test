@@ -5,6 +5,7 @@ import { For, createSignal } from 'solid-js';
 import { icons } from './Resources';
 import { callAction, world, components } from "./engine/api";
 import update from 'immutability-helper';
+import { runQuery, Has, getComponentValueStrict } from '@latticexyz/recs';
 
 const { ActionTable } = components;
 type Actions = Record<string, {
@@ -35,6 +36,10 @@ export default function Actions() {
     callAction(action, target);
   }
 
+  const entities = runQuery([Has(ActionTable)]);
+  console.log('entities:', entities);
+  // console.log(getComponentValueStrict(ActionTable, entities[0]));
+
   ActionTable.update$.subscribe((change) => {
     let [nextValue, _prevValue] = change.value;
     if (nextValue !== undefined) {
@@ -63,9 +68,10 @@ export default function Actions() {
     <h2>Actions</h2>
     <For each={Object.entries(actions())}>
       {([name, data]) => {
+        console.log(data.costs);
         return <div class="action" onClick={() => !data.targeted && doAction(name)}>
           <div class="action-name">{name}</div>
-          {data.costs.length > 0 && <div class="action-requires">Requires
+          {Object.keys(data.costs).length > 0 && <div class="action-requires">Requires
             <For each={Object.entries(data.costs)}>
               {([name, amount]) => {
                 return <div class="action-requirement">{amount} <img src={icons[name]} class="icon" /></div>

@@ -46,5 +46,20 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    HistoryTable: (() => {
+      const tableId = new TableId("gnomik", "HistoryTable");
+      return defineComponent(
+        world,
+        {
+          target: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }
