@@ -2,6 +2,7 @@ pragma solidity >=0.8.0;
 import { System } from "@latticexyz/world/src/System.sol";
 import { ActionTable } from "../tables/ActionTable.sol";
 import { ResourceTable } from "../tables/ResourceTable.sol";
+import { console } from 'forge-std/console.sol';
 
 contract ActionSystem is System {
 
@@ -69,10 +70,15 @@ contract ActionSystem is System {
         if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("add"))) {
             ResourceTable.set(bytes32(abi.encodePacked(costResource1)), sender, ThisData.inputResourceAmount1 + ThisData.costAmount1, block.timestamp, ThisData.inputRate1);
         }
+        // console.log(ThisData.costFunction);
         if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("sub"))) {
+            console.log('interior');
             // require(,"");
-            ResourceTable.set(bytes32(abi.encodePacked(costResource1)), sender, ThisData.inputResourceAmount1 - ThisData.costAmount1, block.timestamp, ThisData.inputRate1);
+            ResourceTable.set(bytes32(abi.encodePacked(costResource1)), sender, 
+            ThisData.inputResourceAmount1 - ThisData.costAmount1, 
+            block.timestamp, ThisData.inputRate1);
         }
+        // console.logInt(ResourceTable.getValue(bytes32(abi.encodePacked("mushroom")), sender));
         if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("mul"))) {
             ResourceTable.set(bytes32(abi.encodePacked(costResource1)), sender, ThisData.inputResourceAmount1 * ThisData.costAmount1, block.timestamp, ThisData.inputRate1);
         }
@@ -83,17 +89,17 @@ contract ActionSystem is System {
         if (costResourceBytes2 != bytes32(abi.encodePacked(""))) {
             if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("add"))) {
             ResourceTable.set(bytes32(abi.encodePacked(costResource2)), sender, ThisData.inputResourceAmount2 + ThisData.costAmount2, block.timestamp, ThisData.inputRate2);
-        }
-        if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("sub"))) {
-            // require(,"");
-            ResourceTable.set(bytes32(abi.encodePacked(costResource2)), sender, ThisData.inputResourceAmount2 - ThisData.costAmount2, block.timestamp, ThisData.inputRate2);
-        }
-        if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("mul"))) {
-            ResourceTable.set(bytes32(abi.encodePacked(costResource2)), sender, ThisData.inputResourceAmount2 * ThisData.costAmount2, block.timestamp, ThisData.inputRate2);
-        }
-        if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("div"))) {
-            ResourceTable.set(bytes32(abi.encodePacked(costResource2)), sender, ThisData.inputResourceAmount2 / ThisData.costAmount2, block.timestamp, ThisData.inputRate2);
-        }
+            }
+            if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("sub"))) {
+                // require(,"");
+                ResourceTable.set(bytes32(abi.encodePacked(costResource2)), sender, ThisData.inputResourceAmount2 - ThisData.costAmount2, block.timestamp, ThisData.inputRate2);
+            }
+            if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("mul"))) {
+                ResourceTable.set(bytes32(abi.encodePacked(costResource2)), sender, ThisData.inputResourceAmount2 * ThisData.costAmount2, block.timestamp, ThisData.inputRate2);
+            }
+            if (keccak256(bytes(ThisData.costFunction)) == keccak256(bytes("div"))) {
+                ResourceTable.set(bytes32(abi.encodePacked(costResource2)), sender, ThisData.inputResourceAmount2 / ThisData.costAmount2, block.timestamp, ThisData.inputRate2);
+            }
         }
 
         // output resource mutation

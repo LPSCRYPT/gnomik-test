@@ -20,6 +20,23 @@ contract ActionTest is MudV2Test {
     world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
     int256 mushrooms = ResourceTable.getValue(world, bytes32(abi.encodePacked("mushroom")), alice);
     assertEq(mushrooms, 1);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("gather")), alice);
+    mushrooms = ResourceTable.getValue(world, bytes32(abi.encodePacked("mushroom")), alice);
+    assertEq(mushrooms, 10);
+    world.gnomik_action_callAction(bytes32(abi.encodePacked("eat")), alice);
+    int256 mushrooms2 = ResourceTable.getValue(world, bytes32(abi.encodePacked("mushroom")), alice);
+    int256 rate = ResourceTable.getRate(world, bytes32(abi.encodePacked("mushroom")), alice);
+    console.log('LOG');
+    console.logInt(rate);
+    console.logInt(mushrooms2);
   }
 
 }
