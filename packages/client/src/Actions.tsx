@@ -74,7 +74,7 @@ export default function Actions() {
           {Object.keys(data.costs).length > 0 && <div class="action-requires">Requires
             <For each={Object.entries(data.costs)}>
               {([name, amount]) => {
-                return <div class="action-requirement">{amount} <img src={icons[name]} class="icon" /></div>
+                return <div class="action-requirement">{amount} {name}</div>
               }}
             </For>
           </div>}

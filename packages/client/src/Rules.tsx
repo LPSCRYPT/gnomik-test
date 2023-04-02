@@ -25,10 +25,10 @@ function EditRule(props: {name: string, action: Action}) {
 function Rule(props: {name: string, action: Action}) {
   return <div>
     "{props.name}", changes {props.action.resourceChange.resource} {props.action.resourceChange.type} by {props.action.resourceChange.amount}
-    {Object.keys(props.action.costs).length > 0 && <span>
+    {Object.keys(props.action.costs).length > 0 && <span> and costs
       <For each={Object.entries(props.action.costs)}>
         {([name, amount]) => {
-          return <div class="action-requirement">{amount} <img src={icons[name]} class="icon" /></div>
+          return <div class="action-requirement">{amount} {name}</div>
         }}
       </For>
     </span>}
