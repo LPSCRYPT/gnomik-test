@@ -17,11 +17,7 @@ contract PostDeploy is Script {
   string[] costFunction = ["sub","sub","sub","sub","sub","sub","sub","sub","sub"];
   string[] resultResource = ["mushroom","thought","mushroom","shroombrew","reputation","thought","gnomehat","rule_spark"];
   string[] resultFunction = ["add","add","add","add","add","add","add","add"];
-<<<<<<< HEAD
   string[] resultType = ["rate","resource","rate","resource","resource","rate","resource","resource"];
-=======
-  string[] resultType = ["rate","resource","rate","resource","resource","rate","resource","resource"]; 
->>>>>>> 65dd096 (deploy)
 
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
@@ -33,17 +29,17 @@ contract PostDeploy is Script {
     ActionTable.set(IWorld(worldAddress), bytes32(abi.encodePacked("gather")), 0, 0, true, 1, 'mushroom', '', 'add',  "mushroom", "add", "resource");
 
     for (uint i = 0; i < names.length; i++) {
-      ActionTable.set(IWorld(worldAddress), 
-      bytes32(abi.encodePacked(names[i])), 
-      cost1[i], 
-      cost2[i], 
-      target[i], 
-      resultAmount[i], 
-      costResource1[i], 
-      costResource2[i], 
-      costFunction[i], 
-      resultResource[i], 
-      resultFunction[i], 
+      ActionTable.set(IWorld(worldAddress),
+      bytes32(abi.encodePacked(names[i])),
+      cost1[i],
+      cost2[i],
+      target[i],
+      resultAmount[i],
+      costResource1[i],
+      costResource2[i],
+      costFunction[i],
+      resultResource[i],
+      resultFunction[i],
       resultType[i]);
     }
     // ActionTable.set(IWorld(worldAddress),
