@@ -13,7 +13,7 @@ contract PostDeploy is Script {
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
     // create gather function
-    ActionTable.set(IWorld(worldAddress), bytes32(abi.encodePacked("gather")), 0, true, 1, 'mushroom', 'add',  "mushroom", "add", "resource");
+    ActionTable.set(IWorld(worldAddress), bytes32(abi.encodePacked("gather")), 0, 0, true, 1, 'mushroom', '', 'add',  "mushroom", "add", "resource");
     vm.stopBroadcast();
   }
 }

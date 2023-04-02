@@ -14,10 +14,12 @@ export default mudConfig({
         action: "bytes32"
       },
       schema : {
-        costAmount: "int256",
+        costAmount1: "int256",
+        costAmount2: "int256",
         selfTarget: "bool",
         resultAmount: "int256",
-        costResource: "string",
+        costResource1: "string",
+        costResource2: "string",
         costFunction: "string",
         resultResource: "string",
         resultFunction: "string",

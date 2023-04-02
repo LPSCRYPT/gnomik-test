@@ -21,10 +21,12 @@ uint256 constant _tableId = uint256(bytes32(abi.encodePacked(bytes16("gnomik"), 
 uint256 constant ActionTableTableId = _tableId;
 
 struct ActionTableData {
-  int256 costAmount;
+  int256 costAmount1;
+  int256 costAmount2;
   bool selfTarget;
   int256 resultAmount;
-  string costResource;
+  string costResource1;
+  string costResource2;
   string costFunction;
   string resultResource;
   string resultFunction;
@@ -34,15 +36,17 @@ struct ActionTableData {
 library ActionTable {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](8);
+    SchemaType[] memory _schema = new SchemaType[](10);
     _schema[0] = SchemaType.INT256;
-    _schema[1] = SchemaType.BOOL;
-    _schema[2] = SchemaType.INT256;
-    _schema[3] = SchemaType.STRING;
+    _schema[1] = SchemaType.INT256;
+    _schema[2] = SchemaType.BOOL;
+    _schema[3] = SchemaType.INT256;
     _schema[4] = SchemaType.STRING;
     _schema[5] = SchemaType.STRING;
     _schema[6] = SchemaType.STRING;
     _schema[7] = SchemaType.STRING;
+    _schema[8] = SchemaType.STRING;
+    _schema[9] = SchemaType.STRING;
 
     return SchemaLib.encode(_schema);
   }
@@ -56,15 +60,17 @@ library ActionTable {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](8);
-    _fieldNames[0] = "costAmount";
-    _fieldNames[1] = "selfTarget";
-    _fieldNames[2] = "resultAmount";
-    _fieldNames[3] = "costResource";
-    _fieldNames[4] = "costFunction";
-    _fieldNames[5] = "resultResource";
-    _fieldNames[6] = "resultFunction";
-    _fieldNames[7] = "resultType";
+    string[] memory _fieldNames = new string[](10);
+    _fieldNames[0] = "costAmount1";
+    _fieldNames[1] = "costAmount2";
+    _fieldNames[2] = "selfTarget";
+    _fieldNames[3] = "resultAmount";
+    _fieldNames[4] = "costResource1";
+    _fieldNames[5] = "costResource2";
+    _fieldNames[6] = "costFunction";
+    _fieldNames[7] = "resultResource";
+    _fieldNames[8] = "resultFunction";
+    _fieldNames[9] = "resultType";
     return ("ActionTable", _fieldNames);
   }
 
@@ -90,8 +96,8 @@ library ActionTable {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
-  /** Get costAmount */
-  function getCostAmount(bytes32 action) internal view returns (int256 costAmount) {
+  /** Get costAmount1 */
+  function getCostAmount1(bytes32 action) internal view returns (int256 costAmount1) {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
@@ -99,8 +105,8 @@ library ActionTable {
     return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
-  /** Get costAmount (using the specified store) */
-  function getCostAmount(IStore _store, bytes32 action) internal view returns (int256 costAmount) {
+  /** Get costAmount1 (using the specified store) */
+  function getCostAmount1(IStore _store, bytes32 action) internal view returns (int256 costAmount1) {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
@@ -108,20 +114,54 @@ library ActionTable {
     return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
-  /** Set costAmount */
-  function setCostAmount(bytes32 action, int256 costAmount) internal {
+  /** Set costAmount1 */
+  function setCostAmount1(bytes32 action, int256 costAmount1) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.setField(_tableId, _primaryKeys, 0, abi.encodePacked((costAmount)));
+    StoreSwitch.setField(_tableId, _primaryKeys, 0, abi.encodePacked((costAmount1)));
   }
 
-  /** Set costAmount (using the specified store) */
-  function setCostAmount(IStore _store, bytes32 action, int256 costAmount) internal {
+  /** Set costAmount1 (using the specified store) */
+  function setCostAmount1(IStore _store, bytes32 action, int256 costAmount1) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.setField(_tableId, _primaryKeys, 0, abi.encodePacked((costAmount)));
+    _store.setField(_tableId, _primaryKeys, 0, abi.encodePacked((costAmount1)));
+  }
+
+  /** Get costAmount2 */
+  function getCostAmount2(bytes32 action) internal view returns (int256 costAmount2) {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 1);
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
+  }
+
+  /** Get costAmount2 (using the specified store) */
+  function getCostAmount2(IStore _store, bytes32 action) internal view returns (int256 costAmount2) {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 1);
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
+  }
+
+  /** Set costAmount2 */
+  function setCostAmount2(bytes32 action, int256 costAmount2) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    StoreSwitch.setField(_tableId, _primaryKeys, 1, abi.encodePacked((costAmount2)));
+  }
+
+  /** Set costAmount2 (using the specified store) */
+  function setCostAmount2(IStore _store, bytes32 action, int256 costAmount2) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    _store.setField(_tableId, _primaryKeys, 1, abi.encodePacked((costAmount2)));
   }
 
   /** Get selfTarget */
@@ -129,7 +169,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 1);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 2);
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
   }
 
@@ -138,7 +178,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 1);
+    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 2);
     return (_toBool(uint8(Bytes.slice1(_blob, 0))));
   }
 
@@ -147,7 +187,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.setField(_tableId, _primaryKeys, 1, abi.encodePacked((selfTarget)));
+    StoreSwitch.setField(_tableId, _primaryKeys, 2, abi.encodePacked((selfTarget)));
   }
 
   /** Set selfTarget (using the specified store) */
@@ -155,7 +195,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.setField(_tableId, _primaryKeys, 1, abi.encodePacked((selfTarget)));
+    _store.setField(_tableId, _primaryKeys, 2, abi.encodePacked((selfTarget)));
   }
 
   /** Get resultAmount */
@@ -163,7 +203,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 2);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 3);
     return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
@@ -172,7 +212,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 2);
+    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 3);
     return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
@@ -181,7 +221,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.setField(_tableId, _primaryKeys, 2, abi.encodePacked((resultAmount)));
+    StoreSwitch.setField(_tableId, _primaryKeys, 3, abi.encodePacked((resultAmount)));
   }
 
   /** Set resultAmount (using the specified store) */
@@ -189,57 +229,107 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.setField(_tableId, _primaryKeys, 2, abi.encodePacked((resultAmount)));
+    _store.setField(_tableId, _primaryKeys, 3, abi.encodePacked((resultAmount)));
   }
 
-  /** Get costResource */
-  function getCostResource(bytes32 action) internal view returns (string memory costResource) {
+  /** Get costResource1 */
+  function getCostResource1(bytes32 action) internal view returns (string memory costResource1) {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 3);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 4);
     return (string(_blob));
   }
 
-  /** Get costResource (using the specified store) */
-  function getCostResource(IStore _store, bytes32 action) internal view returns (string memory costResource) {
+  /** Get costResource1 (using the specified store) */
+  function getCostResource1(IStore _store, bytes32 action) internal view returns (string memory costResource1) {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 3);
+    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 4);
     return (string(_blob));
   }
 
-  /** Set costResource */
-  function setCostResource(bytes32 action, string memory costResource) internal {
+  /** Set costResource1 */
+  function setCostResource1(bytes32 action, string memory costResource1) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.setField(_tableId, _primaryKeys, 3, bytes((costResource)));
+    StoreSwitch.setField(_tableId, _primaryKeys, 4, bytes((costResource1)));
   }
 
-  /** Set costResource (using the specified store) */
-  function setCostResource(IStore _store, bytes32 action, string memory costResource) internal {
+  /** Set costResource1 (using the specified store) */
+  function setCostResource1(IStore _store, bytes32 action, string memory costResource1) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.setField(_tableId, _primaryKeys, 3, bytes((costResource)));
+    _store.setField(_tableId, _primaryKeys, 4, bytes((costResource1)));
   }
 
-  /** Push a slice to costResource */
-  function pushCostResource(bytes32 action, string memory _slice) internal {
+  /** Push a slice to costResource1 */
+  function pushCostResource1(bytes32 action, string memory _slice) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.pushToField(_tableId, _primaryKeys, 3, bytes((_slice)));
+    StoreSwitch.pushToField(_tableId, _primaryKeys, 4, bytes((_slice)));
   }
 
-  /** Push a slice to costResource (using the specified store) */
-  function pushCostResource(IStore _store, bytes32 action, string memory _slice) internal {
+  /** Push a slice to costResource1 (using the specified store) */
+  function pushCostResource1(IStore _store, bytes32 action, string memory _slice) internal {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.pushToField(_tableId, _primaryKeys, 3, bytes((_slice)));
+    _store.pushToField(_tableId, _primaryKeys, 4, bytes((_slice)));
+  }
+
+  /** Get costResource2 */
+  function getCostResource2(bytes32 action) internal view returns (string memory costResource2) {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 5);
+    return (string(_blob));
+  }
+
+  /** Get costResource2 (using the specified store) */
+  function getCostResource2(IStore _store, bytes32 action) internal view returns (string memory costResource2) {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 5);
+    return (string(_blob));
+  }
+
+  /** Set costResource2 */
+  function setCostResource2(bytes32 action, string memory costResource2) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    StoreSwitch.setField(_tableId, _primaryKeys, 5, bytes((costResource2)));
+  }
+
+  /** Set costResource2 (using the specified store) */
+  function setCostResource2(IStore _store, bytes32 action, string memory costResource2) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    _store.setField(_tableId, _primaryKeys, 5, bytes((costResource2)));
+  }
+
+  /** Push a slice to costResource2 */
+  function pushCostResource2(bytes32 action, string memory _slice) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    StoreSwitch.pushToField(_tableId, _primaryKeys, 5, bytes((_slice)));
+  }
+
+  /** Push a slice to costResource2 (using the specified store) */
+  function pushCostResource2(IStore _store, bytes32 action, string memory _slice) internal {
+    bytes32[] memory _primaryKeys = new bytes32[](1);
+    _primaryKeys[0] = bytes32((action));
+
+    _store.pushToField(_tableId, _primaryKeys, 5, bytes((_slice)));
   }
 
   /** Get costFunction */
@@ -247,7 +337,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 4);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 6);
     return (string(_blob));
   }
 
@@ -256,7 +346,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 4);
+    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 6);
     return (string(_blob));
   }
 
@@ -265,7 +355,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.setField(_tableId, _primaryKeys, 4, bytes((costFunction)));
+    StoreSwitch.setField(_tableId, _primaryKeys, 6, bytes((costFunction)));
   }
 
   /** Set costFunction (using the specified store) */
@@ -273,7 +363,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.setField(_tableId, _primaryKeys, 4, bytes((costFunction)));
+    _store.setField(_tableId, _primaryKeys, 6, bytes((costFunction)));
   }
 
   /** Push a slice to costFunction */
@@ -281,7 +371,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.pushToField(_tableId, _primaryKeys, 4, bytes((_slice)));
+    StoreSwitch.pushToField(_tableId, _primaryKeys, 6, bytes((_slice)));
   }
 
   /** Push a slice to costFunction (using the specified store) */
@@ -289,7 +379,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.pushToField(_tableId, _primaryKeys, 4, bytes((_slice)));
+    _store.pushToField(_tableId, _primaryKeys, 6, bytes((_slice)));
   }
 
   /** Get resultResource */
@@ -297,7 +387,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 5);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 7);
     return (string(_blob));
   }
 
@@ -306,7 +396,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 5);
+    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 7);
     return (string(_blob));
   }
 
@@ -315,7 +405,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.setField(_tableId, _primaryKeys, 5, bytes((resultResource)));
+    StoreSwitch.setField(_tableId, _primaryKeys, 7, bytes((resultResource)));
   }
 
   /** Set resultResource (using the specified store) */
@@ -323,7 +413,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.setField(_tableId, _primaryKeys, 5, bytes((resultResource)));
+    _store.setField(_tableId, _primaryKeys, 7, bytes((resultResource)));
   }
 
   /** Push a slice to resultResource */
@@ -331,7 +421,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.pushToField(_tableId, _primaryKeys, 5, bytes((_slice)));
+    StoreSwitch.pushToField(_tableId, _primaryKeys, 7, bytes((_slice)));
   }
 
   /** Push a slice to resultResource (using the specified store) */
@@ -339,7 +429,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.pushToField(_tableId, _primaryKeys, 5, bytes((_slice)));
+    _store.pushToField(_tableId, _primaryKeys, 7, bytes((_slice)));
   }
 
   /** Get resultFunction */
@@ -347,7 +437,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 6);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 8);
     return (string(_blob));
   }
 
@@ -356,7 +446,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 6);
+    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 8);
     return (string(_blob));
   }
 
@@ -365,7 +455,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.setField(_tableId, _primaryKeys, 6, bytes((resultFunction)));
+    StoreSwitch.setField(_tableId, _primaryKeys, 8, bytes((resultFunction)));
   }
 
   /** Set resultFunction (using the specified store) */
@@ -373,7 +463,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.setField(_tableId, _primaryKeys, 6, bytes((resultFunction)));
+    _store.setField(_tableId, _primaryKeys, 8, bytes((resultFunction)));
   }
 
   /** Push a slice to resultFunction */
@@ -381,7 +471,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.pushToField(_tableId, _primaryKeys, 6, bytes((_slice)));
+    StoreSwitch.pushToField(_tableId, _primaryKeys, 8, bytes((_slice)));
   }
 
   /** Push a slice to resultFunction (using the specified store) */
@@ -389,7 +479,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.pushToField(_tableId, _primaryKeys, 6, bytes((_slice)));
+    _store.pushToField(_tableId, _primaryKeys, 8, bytes((_slice)));
   }
 
   /** Get resultType */
@@ -397,7 +487,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 7);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _primaryKeys, 9);
     return (string(_blob));
   }
 
@@ -406,7 +496,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 7);
+    bytes memory _blob = _store.getField(_tableId, _primaryKeys, 9);
     return (string(_blob));
   }
 
@@ -415,7 +505,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.setField(_tableId, _primaryKeys, 7, bytes((resultType)));
+    StoreSwitch.setField(_tableId, _primaryKeys, 9, bytes((resultType)));
   }
 
   /** Set resultType (using the specified store) */
@@ -423,7 +513,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.setField(_tableId, _primaryKeys, 7, bytes((resultType)));
+    _store.setField(_tableId, _primaryKeys, 9, bytes((resultType)));
   }
 
   /** Push a slice to resultType */
@@ -431,7 +521,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    StoreSwitch.pushToField(_tableId, _primaryKeys, 7, bytes((_slice)));
+    StoreSwitch.pushToField(_tableId, _primaryKeys, 9, bytes((_slice)));
   }
 
   /** Push a slice to resultType (using the specified store) */
@@ -439,7 +529,7 @@ library ActionTable {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32((action));
 
-    _store.pushToField(_tableId, _primaryKeys, 7, bytes((_slice)));
+    _store.pushToField(_tableId, _primaryKeys, 9, bytes((_slice)));
   }
 
   /** Get the full data */
@@ -463,20 +553,24 @@ library ActionTable {
   /** Set the full data using individual values */
   function set(
     bytes32 action,
-    int256 costAmount,
+    int256 costAmount1,
+    int256 costAmount2,
     bool selfTarget,
     int256 resultAmount,
-    string memory costResource,
+    string memory costResource1,
+    string memory costResource2,
     string memory costFunction,
     string memory resultResource,
     string memory resultFunction,
     string memory resultType
   ) internal {
     bytes memory _data = encode(
-      costAmount,
+      costAmount1,
+      costAmount2,
       selfTarget,
       resultAmount,
-      costResource,
+      costResource1,
+      costResource2,
       costFunction,
       resultResource,
       resultFunction,
@@ -493,20 +587,24 @@ library ActionTable {
   function set(
     IStore _store,
     bytes32 action,
-    int256 costAmount,
+    int256 costAmount1,
+    int256 costAmount2,
     bool selfTarget,
     int256 resultAmount,
-    string memory costResource,
+    string memory costResource1,
+    string memory costResource2,
     string memory costFunction,
     string memory resultResource,
     string memory resultFunction,
     string memory resultType
   ) internal {
     bytes memory _data = encode(
-      costAmount,
+      costAmount1,
+      costAmount2,
       selfTarget,
       resultAmount,
-      costResource,
+      costResource1,
+      costResource2,
       costFunction,
       resultResource,
       resultFunction,
@@ -523,10 +621,12 @@ library ActionTable {
   function set(bytes32 action, ActionTableData memory _table) internal {
     set(
       action,
-      _table.costAmount,
+      _table.costAmount1,
+      _table.costAmount2,
       _table.selfTarget,
       _table.resultAmount,
-      _table.costResource,
+      _table.costResource1,
+      _table.costResource2,
       _table.costFunction,
       _table.resultResource,
       _table.resultFunction,
@@ -539,10 +639,12 @@ library ActionTable {
     set(
       _store,
       action,
-      _table.costAmount,
+      _table.costAmount1,
+      _table.costAmount2,
       _table.selfTarget,
       _table.resultAmount,
-      _table.costResource,
+      _table.costResource1,
+      _table.costResource2,
       _table.costFunction,
       _table.resultResource,
       _table.resultFunction,
@@ -552,65 +654,76 @@ library ActionTable {
 
   /** Decode the tightly packed blob using this table's schema */
   function decode(bytes memory _blob) internal view returns (ActionTableData memory _table) {
-    // 65 is the total byte length of static data
-    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 65));
+    // 97 is the total byte length of static data
+    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 97));
 
-    _table.costAmount = (int256(uint256(Bytes.slice32(_blob, 0))));
+    _table.costAmount1 = (int256(uint256(Bytes.slice32(_blob, 0))));
 
-    _table.selfTarget = (_toBool(uint8(Bytes.slice1(_blob, 32))));
+    _table.costAmount2 = (int256(uint256(Bytes.slice32(_blob, 32))));
 
-    _table.resultAmount = (int256(uint256(Bytes.slice32(_blob, 33))));
+    _table.selfTarget = (_toBool(uint8(Bytes.slice1(_blob, 64))));
+
+    _table.resultAmount = (int256(uint256(Bytes.slice32(_blob, 65))));
 
     uint256 _start;
-    uint256 _end = 97;
+    uint256 _end = 129;
 
     _start = _end;
     _end += _encodedLengths.atIndex(0);
-    _table.costResource = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+    _table.costResource1 = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
 
     _start = _end;
     _end += _encodedLengths.atIndex(1);
-    _table.costFunction = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+    _table.costResource2 = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
 
     _start = _end;
     _end += _encodedLengths.atIndex(2);
-    _table.resultResource = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+    _table.costFunction = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
 
     _start = _end;
     _end += _encodedLengths.atIndex(3);
-    _table.resultFunction = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+    _table.resultResource = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
 
     _start = _end;
     _end += _encodedLengths.atIndex(4);
+    _table.resultFunction = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+
+    _start = _end;
+    _end += _encodedLengths.atIndex(5);
     _table.resultType = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
   }
 
   /** Tightly pack full data using this table's schema */
   function encode(
-    int256 costAmount,
+    int256 costAmount1,
+    int256 costAmount2,
     bool selfTarget,
     int256 resultAmount,
-    string memory costResource,
+    string memory costResource1,
+    string memory costResource2,
     string memory costFunction,
     string memory resultResource,
     string memory resultFunction,
     string memory resultType
   ) internal view returns (bytes memory) {
-    uint16[] memory _counters = new uint16[](5);
-    _counters[0] = uint16(bytes(costResource).length);
-    _counters[1] = uint16(bytes(costFunction).length);
-    _counters[2] = uint16(bytes(resultResource).length);
-    _counters[3] = uint16(bytes(resultFunction).length);
-    _counters[4] = uint16(bytes(resultType).length);
+    uint16[] memory _counters = new uint16[](6);
+    _counters[0] = uint16(bytes(costResource1).length);
+    _counters[1] = uint16(bytes(costResource2).length);
+    _counters[2] = uint16(bytes(costFunction).length);
+    _counters[3] = uint16(bytes(resultResource).length);
+    _counters[4] = uint16(bytes(resultFunction).length);
+    _counters[5] = uint16(bytes(resultType).length);
     PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
 
     return
       abi.encodePacked(
-        costAmount,
+        costAmount1,
+        costAmount2,
         selfTarget,
         resultAmount,
         _encodedLengths.unwrap(),
-        bytes((costResource)),
+        bytes((costResource1)),
+        bytes((costResource2)),
         bytes((costFunction)),
         bytes((resultResource)),
         bytes((resultFunction)),

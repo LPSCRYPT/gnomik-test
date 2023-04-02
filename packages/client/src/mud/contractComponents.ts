@@ -10,10 +10,12 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          costAmount: RecsType.BigInt,
+          costAmount1: RecsType.BigInt,
+          costAmount2: RecsType.BigInt,
           selfTarget: RecsType.Boolean,
           resultAmount: RecsType.BigInt,
-          costResource: RecsType.String,
+          costResource1: RecsType.String,
+          costResource2: RecsType.String,
           costFunction: RecsType.String,
           resultResource: RecsType.String,
           resultFunction: RecsType.String,
