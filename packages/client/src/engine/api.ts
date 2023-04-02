@@ -1,5 +1,15 @@
-// import { setup } from "./mud/setup";
-// export const { components, worldSend } = await setup();
+import { ethers } from 'ethers';
+import { setup } from "../mud/setup";
+export const { world, components, worldSend, playerEntity, network } = await setup();
+
+export const me = network.connectedAddress.get();
+
+export function callAction(actionName: string, target?: string) {
+  worldSend("gnomik_action_callAction", [
+    ethers.utils.formatBytes32String(actionName),
+    target ? target : network.connectedAddress.get() as any,
+  ]);
+}
 
 // Dummy state
 import { createEffect } from "solid-js";

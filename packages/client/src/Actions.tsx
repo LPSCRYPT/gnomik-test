@@ -1,18 +1,24 @@
-import api from './engine/api';
+import { ethers } from 'ethers';
 import { numFmt } from './format';
 import { ActionName } from './engine/state';
 import { For, createSignal } from 'solid-js';
 import { icons } from './Resources';
-import { tryTakeAction } from './engine/logic';
+import { callAction, world, components } from "./engine/api";
+import update from 'immutability-helper';
 
-const inject = (str: string, obj: Object) => str.replace(/\${(.*?)}/g, (x,g)=> obj[g]);
+const { ActionTable } = components;
+type Actions = Record<string, {
+  targeted: boolean,
+  costs: Record<string, number>,
+}>
 
 export function ChooseActor(props: {
   onSelect: (actor: string) => void,
 }) {
+  const otherPlayers = [] as any // TODO;
   return <div class="choose-target">
     <h2>Choose Target</h2>
-    <For each={api.otherPlayers}>
+    <For each={otherPlayers}>
       {(actor) => {
         return <div class="other-actor" onClick={() => props.onSelect(actor)}>
           <div>{actor}</div>
@@ -24,30 +30,43 @@ export function ChooseActor(props: {
 }
 
 export default function Actions() {
-  const [actions, setActions] = createSignal(api.actions.get());
-  api.actions.subscribe(setActions);
-
+  const [actions, setActions] = createSignal<Actions>({});
   const doAction = (action: ActionName, target?: string) => {
-    let h = [...api.history.get()];
-
-    if (tryTakeAction(action)) {
-      let event = inject(actions()[action].desc, {
-        actor: api.player,
-        target
-      });
-      h.push(event);
-      api.history.set(h);
-    }
+    callAction(action, target);
   }
+
+  ActionTable.update$.subscribe((change) => {
+    let [nextValue, _prevValue] = change.value;
+    if (nextValue !== undefined) {
+      let key = world.entities[change.entity];
+      let [actionName, _addr] = key.split(':');
+      actionName = ethers.utils.parseBytes32String(actionName);
+
+      let costs: Record<string, number> = {};
+      if (nextValue.costResource1) {
+        costs[nextValue.costResource1] = Number(nextValue.costAmount1);
+      }
+      if (nextValue.costResource2) {
+        costs[nextValue.costResource2] = Number(nextValue.costAmount2);
+      }
+
+      setActions(update(actions(), {
+        [actionName]: {$set: {
+          targeted: !nextValue.selfTarget,
+          costs,
+        }}
+      }));
+    }
+  });
 
   return <div class="panel actions">
     <h2>Actions</h2>
     <For each={Object.entries(actions())}>
       {([name, data]) => {
         return <div class="action" onClick={() => !data.targeted && doAction(name)}>
-          <div class="action-name">{data.name}</div>
-          {data.requires && <div class="action-requires">Requires
-            <For each={Object.entries(data.requires)}>
+          <div class="action-name">{name}</div>
+          {data.costs.length > 0 && <div class="action-requires">Requires
+            <For each={Object.entries(data.costs)}>
               {([name, amount]) => {
                 return <div class="action-requirement">{amount} <img src={icons[name]} class="icon" /></div>
               }}

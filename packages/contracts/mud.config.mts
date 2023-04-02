@@ -36,6 +36,16 @@ export default mudConfig({
         lastTimeUpdated: "uint256",
         rate: "int256"
       }
+    },
+    HistoryTable : {
+      primaryKeys: {
+        action: "bytes32",
+        gnome: "address",
+        lastTimeUpdated: "uint256",
+      },
+      schema : {
+        target: "address",
+      }
     }
   },
   modules: [

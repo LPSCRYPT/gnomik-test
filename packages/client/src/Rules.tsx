@@ -1,79 +1,80 @@
-import api from './engine/api';
-import { numFmt } from "./format";
-import { icons } from './Resources';
+import { ethers } from 'ethers';
 import { For, createSignal } from "solid-js";
-import { Rule as RuleType, Condition as CondType, Consequence as ConsqType } from './engine/rules';
-import EditRule from './RuleEditor';
+import { icons } from './Resources';
 import update from 'immutability-helper';
-import { tryPayResources } from './engine/logic';
+import { world, components } from "./engine/api";
 
-
-function Condition(props: {cond: CondType}) {
-  if (props.cond.type == 'resource') {
-    return <div class="condition">If <img src={icons[props.cond.name]} class="icon" />{props.cond.name} {props.cond.operator} {numFmt(props.cond.value)}, then&nbsp;</div>
+const { ActionTable } = components;
+interface Action {
+  targeted: boolean,
+  costs: Record<string, number>,
+  costFunction: string,
+  resourceChange: {
+    resource: string,
+    type: string,
+    function: string,
+    amount: number,
   }
-  return <div class="condition">(unknown condition)</div>
+}
+type Actions = Record<string, Action>;
+
+function EditRule(props: {name: string, action: Action}) {
+  // TODO
 }
 
-function Consequence(props: {consq: ConsqType}) {
-  if (props.consq.type == 'win') {
-    return <div class="consequence">you win.</div>
-  } else if (props.consq.type == 'die') {
-    return <div class="consequence">you die.</div>
-  } else if (props.consq.type == 'gainResource') {
-    return <div class="consequence">you gain <img src={icons[props.consq.name]} class="icon" />{numFmt(props.consq.value)}.</div>
-  } else if (props.consq.type == 'loseResource') {
-    return <div class="consequence">you lose <img src={icons[props.consq.name]} class="icon" />{numFmt(props.consq.value)}.</div>
-  } else if (props.consq.type == 'changeRate') {
-    return <div class="consequence">your <img src={icons[props.consq.name]} class="icon" /> production rate changes by {numFmt(props.consq.value)}.</div>
-  }
-  return <div class="condition">(unknown consequence)</div>
-}
+function Rule(props: {name: string, action: Action}) {
+  return <div>
+    "{props.name}", changes {props.action.resourceChange.resource} {props.action.resourceChange.type} by {props.action.resourceChange.amount}
+    {props.action.costs.length > 0 && <span>
+      <For each={Object.entries(props.action.costs)}>
+        {([name, amount]) => {
+          return <div class="action-requirement">{amount} <img src={icons[name]} class="icon" /></div>
+        }}
+      </For>
+    </span>}
 
-function Rule(props: {idx: number, rule: RuleType}) {
-  let actions = api.actions.get();
-  let [editing, setEditing] = createSignal(false);
-
-  const displayComponent = () => {
-    if (props.rule.type == 'conditional') {
-      return <div class="rule">
-        <Condition cond={props.rule.condition} />
-        <Consequence consq={props.rule.consequence} />
-      </div>
-    } else if (props.rule.type == 'action') {
-      return <div class="rule">
-        When you <em>{actions[props.rule.action].name}</em>,&nbsp;<Consequence consq={props.rule.consequence} />
-      </div>
-    }
-    return <div class="rule">(unknown rule)</div>
-  }
-
-  const component = () => {
-    if (editing()) {
-      return <EditRule rule={props.rule} update={(changes) => {
-        let rules = update(api.rules.get(), {
-          [props.idx]: changes
-        });
-        api.rules.set(rules);
-      }} />
-    } else {
-      return <div class="rule-wrapper">{displayComponent()} <div class="edit-rule-button" onClick={() => {
-        setEditing(true);
-      }}>Edit (20 <img src="/assets/img/thought.png" class="icon" />)</div></div>
-    }
-  }
-
-  return <>{component()}</>
+  </div>
 }
 
 export default function Rules() {
-  const [rules, setRules] = createSignal(api.rules.get());
-  api.rules.subscribe(setRules);
+  const [actions, setActions] = createSignal<Actions>({});
+
+  ActionTable.update$.subscribe((change) => {
+    let [nextValue, _prevValue] = change.value;
+    if (nextValue !== undefined) {
+      let key = world.entities[change.entity];
+      let [actionName, _addr] = key.split(':');
+      actionName = ethers.utils.parseBytes32String(actionName);
+
+      let costs: Record<string, number> = {};
+      if (nextValue.costResource1) {
+        costs[nextValue.costResource1] = Number(nextValue.costAmount1);
+      }
+      if (nextValue.costResource2) {
+        costs[nextValue.costResource2] = Number(nextValue.costAmount2);
+      }
+
+      let action = {
+        targeted: !nextValue.selfTarget,
+        costs,
+        costFunction: nextValue.costFunction,
+        resourceChange: {
+          resource: nextValue.resultResource,
+          function: nextValue.resultFunction,
+          type: nextValue.resultType,
+          amount: Number(nextValue.resultAmount)
+        }
+      }
+      setActions(update(actions(), {
+        [actionName]: {$set: action}
+      }));
+    }
+  });
 
   return <div class="panel rules">
     <h2>Rules</h2>
-    <For each={rules()}>
-      {(rule, i) => <Rule idx={i()} rule={rule} />}
+    <For each={Object.entries(actions())}>
+      {([name, action]) => <Rule name={name} action={action} />}
     </For>
   </div>
 }
