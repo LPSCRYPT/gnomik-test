@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import "forge-std/Script.sol";
 import { IWorld } from "../src/world/IWorld.sol";
-import { MushroomTable } from "../src/tables/MushroomTable.sol";
+import { ActionTable } from "../src/tables/ActionTable.sol";
 
 contract PostDeploy is Script {
   function run(address worldAddress) external {
@@ -12,7 +12,8 @@ contract PostDeploy is Script {
 
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
-    MushroomTable.set(IWorld(worldAddress), address(1), 100);
+    // create gather function
+    ActionTable.set(IWorld(worldAddress), bytes32(abi.encodePacked("gather")), 0, true, 1, 'mushroom', 'add',  "mushroom", "add", "resource");
     vm.stopBroadcast();
   }
 }

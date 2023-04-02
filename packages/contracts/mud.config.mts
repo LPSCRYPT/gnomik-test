@@ -3,18 +3,36 @@ import { mudConfig, resolveTableId } from "@latticexyz/cli";
 export default mudConfig({
   namespace: "gnomik",
   overrideSystems: {
-    MushroomSystem: {
-      fileSelector: "mushroom",
+    ActionSystem : {
+      fileSelector: "action",
       openAccess: true,
-    },
+    }
   },
   tables: {
-    MushroomTable: {
+    ActionTable : {
       primaryKeys: {
-        player: "address"
+        action: "bytes32"
       },
-      schema: {
-        value: "int32"
+      schema : {
+        costAmount: "int256",
+        selfTarget: "bool",
+        resultAmount: "int256",
+        costResource: "string",
+        costFunction: "string",
+        resultResource: "string",
+        resultFunction: "string",
+        resultType: "string"
+      }
+    },
+    ResourceTable : {
+      primaryKeys: {
+        resource: "bytes32",
+        gnome: "address"
+      },
+      schema : {
+        value: "int256",
+        lastTimeUpdated: "uint256",
+        rate: "int256"
       }
     }
   },

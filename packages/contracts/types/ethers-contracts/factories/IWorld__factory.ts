@@ -273,15 +273,19 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "gnomik_mushroom_eat",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "gnomik_mushroom_produce",
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_name",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "_target",
+        type: "address",
+      },
+    ],
+    name: "gnomik_action_callAction",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

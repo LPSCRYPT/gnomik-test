@@ -17,16 +17,16 @@ import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
-uint256 constant _tableId = uint256(bytes32(abi.encodePacked(bytes16("gnomik"), bytes16("MushroomTable"))));
-uint256 constant MushroomTableTableId = _tableId;
+uint256 constant _tableId = uint256(bytes32(abi.encodePacked(bytes16("gnomik"), bytes16("ThoughtTable"))));
+uint256 constant ThoughtTableTableId = _tableId;
 
-struct MushroomTableData {
+struct ThoughtTableData {
   uint256 value;
   uint256 lastTimeUpdated;
   uint256 rate;
 }
 
-library MushroomTable {
+library ThoughtTable {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](3);
@@ -50,7 +50,7 @@ library MushroomTable {
     _fieldNames[0] = "value";
     _fieldNames[1] = "lastTimeUpdated";
     _fieldNames[2] = "rate";
-    return ("MushroomTable", _fieldNames);
+    return ("ThoughtTable", _fieldNames);
   }
 
   /** Register the table's schema */
@@ -178,7 +178,7 @@ library MushroomTable {
   }
 
   /** Get the full data */
-  function get(address player) internal view returns (MushroomTableData memory _table) {
+  function get(address player) internal view returns (ThoughtTableData memory _table) {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32(bytes20((player)));
 
@@ -187,7 +187,7 @@ library MushroomTable {
   }
 
   /** Get the full data (using the specified store) */
-  function get(IStore _store, address player) internal view returns (MushroomTableData memory _table) {
+  function get(IStore _store, address player) internal view returns (ThoughtTableData memory _table) {
     bytes32[] memory _primaryKeys = new bytes32[](1);
     _primaryKeys[0] = bytes32(bytes20((player)));
 
@@ -216,17 +216,17 @@ library MushroomTable {
   }
 
   /** Set the full data using the data struct */
-  function set(address player, MushroomTableData memory _table) internal {
+  function set(address player, ThoughtTableData memory _table) internal {
     set(player, _table.value, _table.lastTimeUpdated, _table.rate);
   }
 
   /** Set the full data using the data struct (using the specified store) */
-  function set(IStore _store, address player, MushroomTableData memory _table) internal {
+  function set(IStore _store, address player, ThoughtTableData memory _table) internal {
     set(_store, player, _table.value, _table.lastTimeUpdated, _table.rate);
   }
 
   /** Decode the tightly packed blob using this table's schema */
-  function decode(bytes memory _blob) internal pure returns (MushroomTableData memory _table) {
+  function decode(bytes memory _blob) internal pure returns (ThoughtTableData memory _table) {
     _table.value = (uint256(Bytes.slice32(_blob, 0)));
 
     _table.lastTimeUpdated = (uint256(Bytes.slice32(_blob, 32)));

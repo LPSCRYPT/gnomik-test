@@ -5,12 +5,36 @@ import { defineComponent, Type as RecsType, World } from "@latticexyz/recs";
 
 export function defineContractComponents(world: World) {
   return {
-    MushroomTable: (() => {
-      const tableId = new TableId("gnomik", "MushroomTable");
+    ActionTable: (() => {
+      const tableId = new TableId("gnomik", "ActionTable");
       return defineComponent(
         world,
         {
-          value: RecsType.Number,
+          costAmount: RecsType.BigInt,
+          selfTarget: RecsType.Boolean,
+          resultAmount: RecsType.BigInt,
+          costResource: RecsType.String,
+          costFunction: RecsType.String,
+          resultResource: RecsType.String,
+          resultFunction: RecsType.String,
+          resultType: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    ResourceTable: (() => {
+      const tableId = new TableId("gnomik", "ResourceTable");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.BigInt,
+          lastTimeUpdated: RecsType.BigInt,
+          rate: RecsType.BigInt,
         },
         {
           metadata: {

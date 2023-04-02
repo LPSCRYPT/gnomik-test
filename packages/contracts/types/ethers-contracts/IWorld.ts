@@ -37,8 +37,7 @@ export interface IWorldInterface extends utils.Interface {
     "getRecord(uint256,bytes32[],bytes32)": FunctionFragment;
     "getRecord(uint256,bytes32[])": FunctionFragment;
     "getSchema(uint256)": FunctionFragment;
-    "gnomik_mushroom_eat()": FunctionFragment;
-    "gnomik_mushroom_produce()": FunctionFragment;
+    "gnomik_action_callAction(bytes32,address)": FunctionFragment;
     "grantAccess(bytes16,address)": FunctionFragment;
     "grantAccess(bytes16,bytes16,address)": FunctionFragment;
     "installModule(address,bytes)": FunctionFragment;
@@ -66,8 +65,7 @@ export interface IWorldInterface extends utils.Interface {
       | "getRecord(uint256,bytes32[],bytes32)"
       | "getRecord(uint256,bytes32[])"
       | "getSchema"
-      | "gnomik_mushroom_eat"
-      | "gnomik_mushroom_produce"
+      | "gnomik_action_callAction"
       | "grantAccess(bytes16,address)"
       | "grantAccess(bytes16,bytes16,address)"
       | "installModule"
@@ -134,12 +132,8 @@ export interface IWorldInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "gnomik_mushroom_eat",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "gnomik_mushroom_produce",
-    values?: undefined
+    functionFragment: "gnomik_action_callAction",
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "grantAccess(bytes16,address)",
@@ -270,11 +264,7 @@ export interface IWorldInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "getSchema", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "gnomik_mushroom_eat",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "gnomik_mushroom_produce",
+    functionFragment: "gnomik_action_callAction",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -460,11 +450,9 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string] & { schema: string }>;
 
-    gnomik_mushroom_eat(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    gnomik_mushroom_produce(
+    gnomik_action_callAction(
+      _name: PromiseOrValue<BytesLike>,
+      _target: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -622,11 +610,9 @@ export interface IWorld extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  gnomik_mushroom_eat(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  gnomik_mushroom_produce(
+  gnomik_action_callAction(
+    _name: PromiseOrValue<BytesLike>,
+    _target: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -784,9 +770,11 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    gnomik_mushroom_eat(overrides?: CallOverrides): Promise<void>;
-
-    gnomik_mushroom_produce(overrides?: CallOverrides): Promise<void>;
+    gnomik_action_callAction(
+      _name: PromiseOrValue<BytesLike>,
+      _target: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     "grantAccess(bytes16,address)"(
       namespace: PromiseOrValue<BytesLike>,
@@ -975,11 +963,9 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    gnomik_mushroom_eat(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    gnomik_mushroom_produce(
+    gnomik_action_callAction(
+      _name: PromiseOrValue<BytesLike>,
+      _target: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1138,11 +1124,9 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    gnomik_mushroom_eat(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    gnomik_mushroom_produce(
+    gnomik_action_callAction(
+      _name: PromiseOrValue<BytesLike>,
+      _target: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
