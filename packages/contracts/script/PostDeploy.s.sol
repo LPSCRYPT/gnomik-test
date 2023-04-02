@@ -28,33 +28,20 @@ contract PostDeploy is Script {
     // create gather function
     ActionTable.set(IWorld(worldAddress), bytes32(abi.encodePacked("gather")), 0, 0, true, 1, 'mushroom', '', 'add',  "mushroom", "add", "resource");
 
-    ActionTable.set(IWorld(worldAddress), 
-    bytes32(abi.encodePacked("eat")), 
-    10, 
-    0, 
-    true, 
-    1, 
-    "mushroom", 
-    "", 
-    "sub", 
-    "mushroom", 
-    "add", 
-    "rate");
-
-    // for (uint i = 0; i > names.length; i++) {
-    //   ActionTable.set(IWorld(worldAddress), 
-    //   bytes32(abi.encodePacked(names[i])), 
-    //   cost1[i], 
-    //   cost2[i], 
-    //   target[i], 
-    //   resultAmount[i], 
-    //   costResource1[i], 
-    //   costResource2[i], 
-    //   costFunction[i], 
-    //   resultResource[i], 
-    //   resultFunction[i], 
-    //   resultType[i]);
-    // }
+    for (uint i = 0; i > names.length; i++) {
+      ActionTable.set(IWorld(worldAddress), 
+      bytes32(abi.encodePacked(names[i])), 
+      cost1[i], 
+      cost2[i], 
+      target[i], 
+      resultAmount[i], 
+      costResource1[i], 
+      costResource2[i], 
+      costFunction[i], 
+      resultResource[i], 
+      resultFunction[i], 
+      resultType[i]);
+    }
     // ActionTable.set(IWorld(worldAddress), 
     //   bytes32(abi.encodePacked(names[0])), 
     //   cost1[0], 
